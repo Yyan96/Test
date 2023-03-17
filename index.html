@@ -30,12 +30,12 @@
 		let controller;
 
 		const geometries = [
-			new THREE.BoxGeometry(0.04, 0.04, 0.04),
-			new THREE.ConeGeometry(0.04, 0.04, 64),
-			new THREE.CylinderGeometry(0.04, 0.04, 0.04, 64),
-			new THREE.IcosahedronGeometry(0.04, 8),
-			new THREE.TorusGeometry(0.04, 0.008, 64, 32)
-		].rotateX( Math.PI / 2 );
+			new THREE.BoxGeometry(0.04, 0.04, 0.04).rotateX( Math.PI / 2 ),
+			new THREE.ConeGeometry(0.04, 0.04, 64).rotateX( Math.PI / 2 ),
+			new THREE.CylinderGeometry(0.04, 0.04, 0.04, 64).rotateX( Math.PI / 2 ),
+			new THREE.IcosahedronGeometry(0.04, 8).rotateX( Math.PI / 2 ),
+			new THREE.TorusGeometry(0.04, 0.008, 64, 32).rotateX( Math.PI / 2 )
+		];
 
 		init();
 		animate();
@@ -52,6 +52,13 @@
 			const light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
 			light.position.set(0.5, 1, 0.25);
 			scene.add(light);
+			const lightB = new THREE.DirectionalLight()
+			light.castShadow = true
+			light.shadow.mapSize.width = 640
+			light.shadow.mapSize.height = 480
+			light.shadow.camera.near = 0.5
+			light.shadow.camera.far = 100
+			scene.add(lightB);
 
 			//
 
