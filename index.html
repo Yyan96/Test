@@ -23,6 +23,7 @@
         <script type="module">
             import * as THREE from 'three';
 			import { ARButton } from 'three/addons/webxr/ARButton.js';
+            import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 			let camera, scene, renderer;
 			let controller;
@@ -57,20 +58,44 @@
 
 				//
 
-				// const geometry = new THREE.CylinderGeometry( 0, 0.05, 0.2, 32 ).rotateX( Math.PI / 2 );
+				//const geometry = new THREE.CylinderGeometry( 0, 0.05, 0.2, 32 ).rotateX( Math.PI / 2 );
+
+				// group = new THREE.Group();
+				// scene.add( group );
 
 				const geometries = [
-				    new THREE.BoxGeometry( 0.2, 0.2, 0.2 ),
+					new THREE.BoxGeometry( 0.2, 0.2, 0.2 ),
 					new THREE.ConeGeometry( 0.2, 0.2, 64 ),
 					new THREE.CylinderGeometry( 0.2, 0.2, 0.2, 64 ),
 					new THREE.IcosahedronGeometry( 0.2, 8 ),
 					new THREE.TorusGeometry( 0.2, 0.04, 64, 32 )
-				].rotateX( Math.PI / 2 );
-6
+				];
+
+				// Initialize Three.js mesh with initial geometry
+				let mesh = new THREE.Mesh(geometries[0], new THREE.MeshNormalMaterial());
+
+				// Add mesh to AR marker entity
+				const object = document.querySelector('#object');
+                object.setObject3D('mesh', mesh);
+
+               // Define function to generate random 3D object on touch
+               function generateRandomObject() {
+               // Remove previous mesh from AR marker entity
+               object.remove(mesh);
+
+               // Generate random geometry from pre-defined array
+               let geometry = objects[Math.floor(Math.random() * objects.length)];
+
+              // Create new mesh with random geometry and add to AR marker entity
+              mesh = new THREE.Mesh(geometry, new THREE.MeshNormalMaterial());
+              object.setObject3D('mesh', mesh);
+              }
 				function onSelect() {
 
 					const material = new THREE.MeshPhongMaterial( { color: 0xffffff * Math.random() } );
-					const mesh = new THREE.Mesh( geometries, material );
+					//const mesh = new THREE.Mesh( object, material );
+					const mesh = new THREE.Mesh(object, material);
+					object.setObject3D('mesh', mesh);
 					mesh.position.set( 0, 0, - 0.3 ).applyMatrix4( controller.matrixWorld );
 					mesh.quaternion.setFromRotationMatrix( controller.matrixWorld );
 					scene.add( mesh );
@@ -79,6 +104,7 @@
 
 				controller = renderer.xr.getController( 0 );
 				controller.addEventListener( 'select', onSelect );
+				object.addEventListener('select', generateRandomObject);
 				scene.add( controller );
 
 				//
