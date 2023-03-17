@@ -58,18 +58,18 @@
 
 				//
 
-				//const geometry = new THREE.CylinderGeometry( 0, 0.05, 0.2, 32 ).rotateX( Math.PI / 2 );
+				const geometry = new THREE.IcosahedronGeometry( 0.2, 8 ).rotateX( Math.PI / 2 );
 
 				// group = new THREE.Group();
 				// scene.add( group );
 
-				const geometries = [
-					new THREE.BoxGeometry( 0.2, 0.2, 0.2 ),
-					new THREE.ConeGeometry( 0.2, 0.2, 64 ),
-					new THREE.CylinderGeometry( 0.2, 0.2, 0.2, 64 ),
-					new THREE.IcosahedronGeometry( 0.2, 8 ),
-					new THREE.TorusGeometry( 0.2, 0.04, 64, 32 )
-				];
+				// const geometries = [
+				// 	new THREE.BoxGeometry( 0.2, 0.2, 0.2 ),
+				// 	new THREE.ConeGeometry( 0.2, 0.2, 64 ),
+				// 	new THREE.CylinderGeometry( 0.2, 0.2, 0.2, 64 ),
+				// 	new THREE.IcosahedronGeometry( 0.2, 8 ),
+				// 	new THREE.TorusGeometry( 0.2, 0.04, 64, 32 )
+				// ];
 
 				
 
@@ -99,7 +99,7 @@
 				function onSelect() {
 
 					const material = new THREE.MeshPhongMaterial( { color: 0xffffff * Math.random() } );
-					const mesh = new THREE.Mesh( geometries, material );
+					const mesh = new THREE.Mesh( geometry, material );
 					mesh.position.set( 0, 0, - 0.3 ).applyMatrix4( controller.matrixWorld );
 					mesh.quaternion.setFromRotationMatrix( controller.matrixWorld );
 					scene.add( mesh );
