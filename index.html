@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-		<title>Three.js sketch</title>
 
-        <!-- just follow the link in a web browser to copy the code into a local javascript file -->
-        <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
-        <script type="importmap">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<title>Three.js sketch</title>
+
+	<!-- just follow the link in a web browser to copy the code into a local javascript file -->
+	<script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+	<script type="importmap">
         {
             "imports": {
             "three": "https://unpkg.com/three@0.150.1/build/three.module.js",
@@ -16,104 +17,17 @@
         }
         </script>
 
-        <script type="text/javascript" src="libs/dat.gui.min.js"></script>
-        <script type="text/javascript" src="libs/stats.min.js"></script>
+	<script type="text/javascript" src="libs/dat.gui.min.js"></script>
+	<script type="text/javascript" src="libs/stats.min.js"></script>
 
-        <!-- our code -->
-        <script type="module">
-            import * as THREE from 'three';
-			import { ARButton } from 'three/addons/webxr/ARButton.js';
+	<!-- our code -->
+	<script type="module" src="sketch.js"></script>
+	<!-- <link rel="stylesheet" href="style.css"> -->
+	<link type="text/css" rel="stylesheet" href="main.css">
+</head>
 
-			let camera, scene, renderer;
-			let controller;
+<body>
+	<div id="sketch-container"></div>
+</body>
 
-			init();
-			animate();
-
-			function init() {
-
-				const container = document.createElement( 'div' );
-				document.body.appendChild( container );
-
-				scene = new THREE.Scene();
-
-				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 20 );
-
-				const light = new THREE.HemisphereLight( 0xffffff, 0xbbbbff, 1 );
-				light.position.set( 0.5, 1, 0.25 );
-				scene.add( light );
-
-				//
-
-				renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
-				renderer.setPixelRatio( window.devicePixelRatio );
-				renderer.setSize( window.innerWidth, window.innerHeight );
-				renderer.xr.enabled = true;
-				container.appendChild( renderer.domElement );
-
-				//
-
-				document.body.appendChild( ARButton.createButton( renderer ) );
-
-				//
-
-				// const geometry = new THREE.CylinderGeometry( 0, 0.05, 0.2, 32 ).rotateX( Math.PI / 2 );
-
-				const geometries = [
-				    new THREE.BoxGeometry( 0.2, 0.2, 0.2 ),
-					new THREE.ConeGeometry( 0.2, 0.2, 64 ),
-					new THREE.CylinderGeometry( 0.2, 0.2, 0.2, 64 ),
-					new THREE.IcosahedronGeometry( 0.2, 8 ),
-					new THREE.TorusGeometry( 0.2, 0.04, 64, 32 )
-				].rotateX( Math.PI / 2 );
-6
-				function onSelect() {
-
-					const material = new THREE.MeshPhongMaterial( { color: 0xffffff * Math.random() } );
-					const mesh = new THREE.Mesh( geometries, material );
-					mesh.position.set( 0, 0, - 0.3 ).applyMatrix4( controller.matrixWorld );
-					mesh.quaternion.setFromRotationMatrix( controller.matrixWorld );
-					scene.add( mesh );
-
-				}
-
-				controller = renderer.xr.getController( 0 );
-				controller.addEventListener( 'select', onSelect );
-				scene.add( controller );
-
-				//
-
-				window.addEventListener( 'resize', onWindowResize );
-
-			}
-
-			function onWindowResize() {
-
-				camera.aspect = window.innerWidth / window.innerHeight;
-				camera.updateProjectionMatrix();
-
-				renderer.setSize( window.innerWidth, window.innerHeight );
-
-			}
-
-			//
-
-			function animate() {
-
-				renderer.setAnimationLoop( render );
-
-			}
-
-			function render() {
-
-				renderer.render( scene, camera );
-
-			}
-        </script>
-        <!-- <link rel="stylesheet" href="style.css"> -->
-		<link type="text/css" rel="stylesheet" href="main.css">
-	</head>
-	<body>
-        <div id="sketch-container"></div>
-	</body>
 </html>
